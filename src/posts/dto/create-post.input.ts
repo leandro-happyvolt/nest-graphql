@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsNotEmpty, MinLength, MaxLength, IsInt } from 'class-validator';
 
 // Para que se convierta en un dato de GraphQL, auque también podemos verlo como para que se transforme en una interfaz de TypeScript así cuando el cliente
@@ -13,11 +13,12 @@ export class CreatePostInput {
   title: string;
 
   @MaxLength(400)
-  // Así como le específicamos en la clase que esto podría ser nulo, acá también para que el cliente también sepa
+  // Así como le específicamos en la clase que esto podría ser nulo, acá también para que GraphQL lo marque como no requerido y el cliente sepa que es opcional
   @Field({ nullable: true })
   content: string;
 
   @IsInt()
-  @Field()
+  // Así como en la clase le específicamos que iva a ser de tipo Int, acá también para que GraphQL no nos lo ponga como float y el cliente sepa que tiene que ser un número entero
+  @Field(() => Int)
   authorId: number;
 }

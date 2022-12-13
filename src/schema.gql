@@ -27,13 +27,13 @@ type Mutation {
   createPost(postInput: CreatePostInput!): Post!
   createAuthor(createAuthorInput: CreateAuthorInput!): Author!
   updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
-  removeAuthor(id: Int!): Author!
+  removeAuthor(id: Int!): Int!
 }
 
 input CreatePostInput {
   title: String!
   content: String
-  authorId: Float!
+  authorId: Int!
 }
 
 input CreateAuthorInput {

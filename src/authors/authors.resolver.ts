@@ -30,10 +30,46 @@ export class AuthorsResolver {
   updateAuthor(
     @Args('updateAuthorInput') updateAuthorInput: UpdateAuthorInput,
   ) {
-    return this.authorsService.update(updateAuthorInput.id, updateAuthorInput);
+    return this.authorsService.update(updateAuthorInput);
   }
 
-  @Mutation((returns) => Author)
+  /* Si acá pongo que returns un Author
+  En el servicio:
+  return {
+      id,
+      name: 'author deleted',
+  };
+  En la query de GraphQL:
+  mutation {
+    removeAuthor(id: 18){
+      id
+      name
+    }
+  }
+  En el return de la query:
+  {
+    "data": {
+      "removeAuthor": {
+        "id": 20,
+        "name": "Author Delete"
+      }
+    }
+  }
+    Si acá pongo que returns un Int (tipo de @nestjs/graphql)
+  En el servicio:
+  return id;
+  En la query de GraphQL:
+  mutation {
+    removeAuthor(id: 18)
+  }
+  En el return de la query:
+  {
+    "data": {
+      "removeAuthor": 19
+    }
+  }
+  */
+  @Mutation((returns) => Int)
   removeAuthor(@Args('id', { type: () => Int }) id: number) {
     return this.authorsService.remove(id);
   }

@@ -24,18 +24,23 @@ export class AuthorsService {
     return this.authorsRepository.findOne({ where: { id } });
   }
 
-  async update(id: number, updateAuthorInput: UpdateAuthorInput) {
-    const foundAuthor = await this.findOne(id);
+  // Luego el UpdateAuthorInput debería llamarse UpdateAuthorParams
+  async update(updateAuthorInput: UpdateAuthorInput): Promise<Author> {
+    const foundAuthor = await this.findOne(updateAuthorInput.id);
     if (!foundAuthor) {
-      // throw error nestjs
-      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException('Author not found.', HttpStatus.NOT_FOUND);
     }
     const updatedAuthor = Object.assign(foundAuthor, updateAuthorInput);
-
     return this.authorsRepository.save(updatedAuthor);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} author`;
+  async remove(id: number) {
+    const deletedUser = await this.authorsRepository.delete({ id });
+
+    if (deletedUser.affected === 0) {
+      return new HttpException('Author not found', HttpStatus.NOT_FOUND);
+    }
+
+    return id;
   }
 }
